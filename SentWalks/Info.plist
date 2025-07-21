@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- App Bundle Information -->
+    <key>com.apple.developer.healthkit</key>
+    <true/>
+    <key>com.apple.developer.healthkit.access</key>
+    <array/>
+    
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    
+    <key>CFBundleDisplayName</key>
+    <string>SendWalkSteps!</string>
+    
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    
+    <!-- HealthKit Privacy Descriptions -->
+    <key>NSHealthShareUsageDescription</key>
+    <string>This app reads your step count, walking/running distance, and active energy data to help you track your daily fitness progress and reach your 5000 step goal.</string>
+    
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>This app writes step count, walking/running distance, and active energy data to HealthKit to track and store your fitness activities and progress.</string>
+    
+    <!-- Motion Usage (if you're using Core Motion) -->
+    <key>NSMotionUsageDescription</key>
+    <string>This app uses motion data to accurately count your steps and track your walking activity.</string>
+    
+    <!-- Required Device Capabilities -->
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>armv7</string>
+        <string>healthkit</string>
+    </array>
+    
+    <!-- iOS Version Support -->
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    
+    <key>MinimumOSVersion</key>
+    <string>13.0</string>
+    
+    <!-- App Transport Security -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+    </dict>
+    
+    <!-- Scene Configuration (for iOS 13+) -->
+    <key>UISceneDelegate</key>
+    <dict>
+        <key>UISceneConfigurationName</key>
+        <string>Default Configuration</string>
+        <key>UISceneDelegateClassName</key>
+        <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+        <key>UISceneStoryboardFile</key>
+        <string>Main</string>
+    </dict>
+    
+    <!-- Supported Interface Orientations -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    
+    <!-- Launch Screen -->
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+    
+    <!-- Main Storyboard -->
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+    
+    <!-- Background Modes (if needed for HealthKit) -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>background-processing</string>
+        <string>background-fetch</string>
+    </array>
+    
+    <!-- URL Schemes (replacing your empty dict) -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>sendwalksteps</string>
+            </array>
+        </dict>
+    </array>
+    
+    <!-- Status Bar -->
+    <key>UIStatusBarHidden</key>
+    <false/>
+    
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleDefault</string>
+    
+    <!-- View Controller-Based Status Bar -->
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <true/>
+    
+    <!-- File Sharing (if needed) -->
+    <key>UIFileSharingEnabled</key>
+    <false/>
+    
+    <!-- Supports Document Browser (if needed) -->
+    <key>UISupportsDocumentBrowser</key>
+    <false/>
+    
+    <!-- App Icons -->
+    <key>CFBundleIcons</key>
+    <dict>
+        <key>CFBundlePrimaryIcon</key>
+        <dict>
+            <key>CFBundleIconFiles</key>
+            <array>
+                <string>AppIcon</string>
+            </array>
+        </dict>
+    </dict>
+</dict>
+</plist>
