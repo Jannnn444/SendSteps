@@ -1,10 +1,3 @@
-//
-//  HealthKitManager.swift
-//  SentWalks
-//
-//  Created by Hualiteq International on 2025/7/21.
-//
-
 import Foundation
 import HealthKit
 import SwiftUI
@@ -16,11 +9,17 @@ class HealthKitManager: ObservableObject {
     @Published var authorizationStatus: HKAuthorizationStatus = .notDetermined
     @Published var isAuthorized: Bool = false
     @Published var errorMessage: String = ""
+    @Published var lastBloodPressureWrite: String = ""
     
     // Define the health data types we need
     private let stepCountType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
     private let distanceType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!
     private let activeEnergyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+    
+    // Blood pressure types
+//    private let bloodPressureType = HKCorrelationType.correlationType(forIdentifier: .bloodPressure)!
+    private let systolicType = HKQuantityType.quantityType(forIdentifier: .bloodPressureSystolic)!
+    private let diastolicType = HKQuantityType.quantityType(forIdentifier: .bloodPressureDiastolic)!
     
     init() {
         checkAuthorizationStatus()
@@ -37,8 +36,23 @@ class HealthKitManager: ObservableObject {
         }
         
         // Define what we want to read and write
-        let typesToRead: Set<HKObjectType> = [stepCountType, distanceType, activeEnergyType]
-        let typesToWrite: Set<HKSampleType> = [stepCountType, distanceType, activeEnergyType]
+        let typesToRead: Set<HKObjectType> = [
+            stepCountType,
+            distanceType,
+            activeEnergyType,
+//            bloodPressureType,
+            systolicType,
+            diastolicType
+        ]
+        
+        let typesToWrite: Set<HKSampleType> = [
+            stepCountType,
+            distanceType,
+            activeEnergyType,
+//            bloodPressureType,
+            systolicType,
+            diastolicType
+        ]
         
         print("🔄 Requesting HealthKit authorization...")
         
@@ -130,6 +144,96 @@ class HealthKitManager: ObservableObject {
         }
         
         healthStore.execute(query)
+    }
+    
+    // MARK: - Blood Pressure Functions
+    
+    /// Write blood pressure data to HealthKit
+    /// - Parameters:
+    ///   - systolic: Top number (e.g., 120)
+    ///   - diastolic: Bottom number (e.g., 80)
+    ///   - date: When the reading was taken (defaults to now)
+    func writeBloodPressure(systolic: Double, diastolic: Double, date: Date = Date()) {
+        guard isAuthorized else {
+            DispatchQueue.main.async {
+                self.errorMessage = "Not authorized to write health data"
+            }
+            return
+        }
+        
+        // Validate blood pressure values
+        guard systolic > 0 && diastolic > 0 && systolic > diastolic else {
+            DispatchQueue.main.async {
+                self.errorMessage = "Invalid blood pressure values. Systolic must be greater than diastolic."
+            }
+            return
+        }
+        
+        // Create systolic and diastolic samples
+        let systolicQuantity = HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: systolic)
+        let diastolicQuantity = HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: diastolic)
+        
+        let systolicSample = HKQuantitySample(
+            type: systolicType,
+            quantity: systolicQuantity,
+            start: date,
+            end: date
+        )
+        
+        let diastolicSample = HKQuantitySample(
+            type: diastolicType,
+            quantity: diastolicQuantity,
+            start: date,
+            end: date
+        )
+        
+        // Create correlation (combines both values)
+//        let bloodPressureCorrelation = HKCorrelation(
+////            type: bloodPressureType,
+//            start: date,
+//            end: date,
+//            objects: Set([systolicSample, diastolicSample])
+//        )
+        
+        print("💉 Writing blood pressure: \(Int(systolic))/\(Int(diastolic)) mmHg")
+        
+        // Save to HealthKit
+//        healthStore.save(bloodPressureCorrelation) { [weak self] success, error in
+//            DispatchQueue.main.async {
+//                if let error = error {
+//                    print("❌ Failed to save blood pressure: \(error.localizedDescription)")
+//                    self?.errorMessage = "Failed to save blood pressure: \(error.localizedDescription)"
+//                } else if success {
+//                    print("✅ Blood pressure saved successfully")
+//                    let formatter = DateFormatter()
+//                    formatter.dateStyle = .short
+//                    formatter.timeStyle = .short
+//                    self?.lastBloodPressureWrite = "Saved \(Int(systolic))/\(Int(diastolic)) at \(formatter.string(from: date))"
+//                    self?.errorMessage = ""
+//                } else {
+//                    print("❌ Failed to save blood pressure: Unknown error")
+//                    self?.errorMessage = "Failed to save blood pressure: Unknown error"
+//                }
+//            }
+//        }
+    }
+    
+    /// Write a static/example blood pressure reading
+    func writeStaticBloodPressure() {
+        // Example values - you can change these
+        let exampleSystolic: Double = 120  // Normal systolic
+        let exampleDiastolic: Double = 80   // Normal diastolic
+        
+        writeBloodPressure(systolic: exampleSystolic, diastolic: exampleDiastolic)
+    }
+    
+    /// Write random realistic blood pressure values (for testing)
+    func writeRandomBloodPressure() {
+        // Generate realistic blood pressure values
+        let systolic = Double.random(in: 110...140)  // Normal range
+        let diastolic = Double.random(in: 70...90)   // Normal range
+        
+        writeBloodPressure(systolic: systolic, diastolic: diastolic)
     }
     
     // MARK: - Background Observer (Optional)
